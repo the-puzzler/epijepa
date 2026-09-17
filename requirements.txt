@@ -1,0 +1,8 @@
+torch>=2.4
+torchvision
+timm
+numpy
+scipy
+scikit-learn
+matplotlib
+# SIGReg reference: pip install git+https://github.com/galilai-group/lejepa.git@c293d291ca87cd4fddee9d3fffe4e914c7272052

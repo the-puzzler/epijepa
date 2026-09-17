@@ -1,0 +1,90 @@
+[
+ {
+  "method": "sigreg",
+  "lamb": 0.02,
+  "seed": 0,
+  "online_final": 90.42,
+  "online_best": 90.88,
+  "offline_linear": 90.22,
+  "backbone_rank": 38.9,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "align",
+  "lamb": 0.0,
+  "seed": 0,
+  "online_final": 10.96,
+  "online_best": 19.64,
+  "offline_linear": 23.31,
+  "backbone_rank": 1.5,
+  "epochs": 231,
+  "terminated_early": true
+ },
+ {
+  "method": "epi",
+  "lamb": 0.02,
+  "seed": 0,
+  "online_final": 82.27,
+  "online_best": 82.32,
+  "offline_linear": 84.82,
+  "backbone_rank": 20.2,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "epi",
+  "lamb": 0.05,
+  "seed": 0,
+  "online_final": 85.58,
+  "online_best": 87.01,
+  "offline_linear": 87.18,
+  "backbone_rank": 29.0,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "epi",
+  "lamb": 0.1,
+  "seed": 0,
+  "online_final": 86.09,
+  "online_best": 87.16,
+  "offline_linear": 87.16,
+  "backbone_rank": 26.6,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "epi",
+  "lamb": 0.2,
+  "seed": 0,
+  "online_final": 85.48,
+  "online_best": 86.83,
+  "offline_linear": 87.67,
+  "backbone_rank": 25.4,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "epi",
+  "lamb": 0.4,
+  "seed": 0,
+  "online_final": 85.78,
+  "online_best": 85.86,
+  "offline_linear": 86.24,
+  "backbone_rank": 22.6,
+  "epochs": 800,
+  "terminated_early": false
+ },
+ {
+  "method": "epi",
+  "lamb": 0.8,
+  "seed": 0,
+  "online_final": 85.27,
+  "online_best": 86.78,
+  "offline_linear": 86.57,
+  "backbone_rank": 22.4,
+  "epochs": 800,
+  "terminated_early": false
+ }
+]

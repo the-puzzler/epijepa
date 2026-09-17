@@ -1,0 +1,92 @@
+[
+ {
+  "method": "align",
+  "beta": 0.0,
+  "seed": 0,
+  "backbone_val": 0.6868,
+  "backbone_test": 0.6888,
+  "embedding_val": 0.4754,
+  "embedding_test": 0.4853,
+  "embedding_rank": 1.0000468007856627
+ },
+ {
+  "method": "align",
+  "beta": 0.0,
+  "seed": 1,
+  "backbone_val": 0.6796,
+  "backbone_test": 0.682,
+  "embedding_val": 0.4702,
+  "embedding_test": 0.4757,
+  "embedding_rank": 1.0000469984249742
+ },
+ {
+  "method": "align",
+  "beta": 0.0,
+  "seed": 2,
+  "backbone_val": 0.6792,
+  "backbone_test": 0.6841,
+  "embedding_val": 0.4802,
+  "embedding_test": 0.4798,
+  "embedding_rank": 1.0000509099484172
+ },
+ {
+  "method": "epi",
+  "beta": 0.3,
+  "seed": 0,
+  "backbone_val": 0.7812,
+  "backbone_test": 0.7662,
+  "embedding_val": 0.7294,
+  "embedding_test": 0.7241,
+  "embedding_rank": 60.068281658975124
+ },
+ {
+  "method": "epi",
+  "beta": 0.3,
+  "seed": 1,
+  "backbone_val": 0.769,
+  "backbone_test": 0.763,
+  "embedding_val": 0.715,
+  "embedding_test": 0.7092,
+  "embedding_rank": 58.798615038208624
+ },
+ {
+  "method": "epi",
+  "beta": 0.3,
+  "seed": 2,
+  "backbone_val": 0.7762,
+  "backbone_test": 0.7701,
+  "embedding_val": 0.7216,
+  "embedding_test": 0.7201,
+  "embedding_rank": 56.45004926967048
+ },
+ {
+  "method": "sigreg",
+  "beta": 10.0,
+  "seed": 0,
+  "backbone_val": 0.7824,
+  "backbone_test": 0.7715,
+  "embedding_val": 0.7404,
+  "embedding_test": 0.7326,
+  "embedding_rank": 26.740249553354218
+ },
+ {
+  "method": "sigreg",
+  "beta": 10.0,
+  "seed": 1,
+  "backbone_val": 0.7834,
+  "backbone_test": 0.7781,
+  "embedding_val": 0.74,
+  "embedding_test": 0.7312,
+  "embedding_rank": 23.262084506203077
+ },
+ {
+  "method": "sigreg",
+  "beta": 10.0,
+  "seed": 2,
+  "backbone_val": 0.7866,
+  "backbone_test": 0.7764,
+  "embedding_val": 0.7366,
+  "embedding_test": 0.7312,
+  "embedding_rank": 24.07297620078054
+ }
+]

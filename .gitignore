@@ -1,0 +1,6 @@
+runs/
+data/
+__pycache__/
+*.pt
+*.tgz
+*.tar.gz
