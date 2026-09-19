@@ -62,6 +62,22 @@ within a point.
 
 ![imagenette](results/imagenette.png)
 
+### Ablation: epiplexity alone
+
+Dropping the invariance term and training the encoder to maximise the score by itself:
+
+| Chassis | Backbone probe | Embedding probe / rank | Reference |
+|---|---|---|---|
+| CIFAR-10, 3 seeds | 44.21 ± 0.63 | 33.7 / 62 of 64 | collapse control 68.5, reservoir's own features 32.7 |
+| Imagenette | 32.2 online, 37.4 frozen | rank 15.9 | collapse control 11.0 online, 23.3 frozen |
+
+The encoder finds the score's global maximiser: a full-rank linear image of the random reservoir,
+whose own features probe at about 33%. On CIFAR that is *below* the collapsed control, whose single
+surviving dimension at least separates vehicles from animals. On Imagenette, where the projector has no
+output normalisation, the encoder also inflates the output scale without bound (the log-det is not
+scale-invariant). Epiplexity is an anti-collapse term, not a learning objective; the invariance term
+supplies all of the content and the score only keeps it from collapsing. `results/pure_epiplexity.json`.
+
 ### What the two experiments say
 
 Maximising predictability from a frozen random CNN prevents collapse and gets within 1–3 points of a

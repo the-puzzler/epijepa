@@ -1,0 +1,19 @@
+{
+ "cifar": {
+  "backbone_val_mean": 44.21,
+  "backbone_val_sd": 0.63,
+  "embedding_val_mean": 33.67,
+  "embedding_rank": 62.1,
+  "seeds": 3,
+  "note": "loss = -S/S0 only; reservoir's own features probe at 32.7"
+ },
+ "imagenette": {
+  "online_final": 32.2,
+  "online_best": 38.19,
+  "offline_linear": 37.35,
+  "knn20": 30.06,
+  "backbone_rank": 15.9,
+  "seeds": 1,
+  "note": "lambda = 1.0 in their loss form, invariance weight exactly 0; output scale grows unboundedly (no output norm on the projector)"
+ }
+}
