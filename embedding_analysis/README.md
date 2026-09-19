@@ -55,3 +55,24 @@ python embedding_analysis/cifar_shapes.py --archive data/cifar-10-python.tar.gz 
 python embedding_analysis/imagenette_shapes.py --data data/imagenette2-160 \
     --align runs/imagenette/align --epi runs/imagenette/epi --sigreg runs/imagenette/sigreg
 ```
+
+## Data
+
+`data/` holds the embeddings behind the figures so they can be replotted anywhere, produced by
+`export_data.py` (seed-0 checkpoints, validation split, labels included).
+
+| File | Arrays |
+|---|---|
+| `cifar_embeddings.npz` | per arm `{align,epi,sigreg}_embedding` (5000×64), `_backbone` (5000×512), `_tsne_embedding` and `_tsne_backbone` (5000×2); `labels` (5000), `class_names` |
+| `imagenette_embeddings.npz` | per arm `_projector` (3925×16), `_backbone` (3925×512), `_tsne_backbone` (3925×2); `labels` (3925), `class_names` |
+| `cifar_tsne.csv`, `imagenette_tsne.csv` | the t-SNE points as `arm, space, x, y, label, class` |
+
+Raw embeddings are float16, t-SNE coordinates float32. t-SNE settings match the figure scripts
+(standardised features, PCA init, perplexity 30, random_state 0).
+
+```python
+import numpy as np
+d = np.load("embedding_analysis/data/cifar_embeddings.npz")
+xy, y = d["epi_tsne_embedding"], d["labels"]      # scatter xy coloured by y
+z = d["epi_embedding"].astype(np.float32)           # 5000 x 64 raw embedding
+```
