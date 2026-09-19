@@ -1,0 +1,44 @@
+{
+ "align": {
+  "run": "align seed 0",
+  "projector": {
+   "eff_rank": 2.002625036432944,
+   "excess_kurtosis": 12.050057411193848,
+   "abs_skew": 1.496038556098938,
+   "ks_vs_gaussian": 0.21061314642429352,
+   "mean_abs_corr": 0.6169869038010866
+  },
+  "backbone": {
+   "eff_rank": 1.1013638178598335,
+   "excess_kurtosis": 35.38815689086914
+  }
+ },
+ "epi": {
+  "run": "epi seed 0",
+  "projector": {
+   "eff_rank": 15.150697405132494,
+   "excess_kurtosis": 3.41080641746521,
+   "abs_skew": 0.6805458068847656,
+   "ks_vs_gaussian": 0.08713071048259735,
+   "mean_abs_corr": 0.06895024072399648
+  },
+  "backbone": {
+   "eff_rank": 22.354661223687025,
+   "excess_kurtosis": 0.4350647032260895
+  }
+ },
+ "sigreg": {
+  "run": "sigreg seed 0",
+  "projector": {
+   "eff_rank": 15.888994692592242,
+   "excess_kurtosis": 0.14435790479183197,
+   "abs_skew": 0.13870248198509216,
+   "ks_vs_gaussian": 0.03375900164246559,
+   "mean_abs_corr": 0.023501946115562073
+  },
+  "backbone": {
+   "eff_rank": 31.120885304584718,
+   "excess_kurtosis": -0.06999681890010834
+  }
+ }
+}

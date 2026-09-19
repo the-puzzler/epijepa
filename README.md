@@ -78,6 +78,13 @@ output normalisation, the encoder also inflates the output scale without bound (
 scale-invariant). Epiplexity is an anti-collapse term, not a learning objective; the invariance term
 supplies all of the content and the score only keeps it from collapsing. `results/pure_epiplexity.json`.
 
+### What the embeddings look like
+
+Epiplexity embeddings are not Gaussian: a full-rank cloud with nearly independent, heavy-tailed
+coordinates (excess kurtosis about +4, coordinate correlation 0.05 on CIFAR), something like a sparse
+or ICA-style code. SIGReg's are Gaussian by construction. Figures, metrics and scripts in
+[`embedding_analysis/`](embedding_analysis/).
+
 ### What the two experiments say
 
 Maximising predictability from a frozen random CNN prevents collapse and gets within 1–3 points of a
@@ -116,6 +123,7 @@ imagenette/train.py    LeJEPA MINIMAL.md chassis (verbatim) with the method swit
 imagenette/probe.py    frozen-backbone linear + kNN probe
 imagenette/analyze.py
 results/               curated result tables and figures
+embedding_analysis/    what the embeddings look like: shape metrics, figures, and the scripts that make them
 ```
 
 ## Notes
