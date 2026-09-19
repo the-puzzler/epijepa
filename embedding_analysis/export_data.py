@@ -1,7 +1,8 @@
 """Export the embeddings behind the shape figures, with class labels, so they can be replotted elsewhere.
 
 Writes embedding_analysis/data/{cifar,imagenette}_embeddings.npz (raw embeddings as float16, t-SNE
-coordinates as float32, integer labels, class names) and a CSV of the t-SNE points.
+coordinates as float32, PCA scores on the first 10 components plus the explained-variance ratio,
+integer labels, class names) and CSVs of the t-SNE and PCA points.
 t-SNE uses the same settings as the figure scripts (standardised features, PCA init, perplexity 30, seed 0).
 
     python embedding_analysis/export_data.py --archive data/cifar-10-python.tar.gz --data data/imagenette2-160 \
@@ -13,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from torch.utils.data import DataLoader
 
@@ -33,6 +35,13 @@ def tsne(X):
     return TSNE(2, init="pca", perplexity=30, random_state=0).fit_transform(X).astype(np.float32)
 
 
+def pca(X, k=10):
+    """Scores on the first k components of centred raw features, and the full explained-variance ratio."""
+    m = PCA(min(k, X.shape[1])).fit(X - X.mean(0))
+    full = PCA(min(X.shape)).fit(X - X.mean(0)).explained_variance_ratio_
+    return m.transform(X - X.mean(0)).astype(np.float32), full.astype(np.float32)
+
+
 def write_csv(path, rows):
     with open(path, "w", newline="") as f:
         w = csv.writer(f); w.writerow(["arm", "space", "x", "y", "label", "class"]); w.writerows(rows)
@@ -49,7 +58,7 @@ def main():
         T = load_module("cifar_train", ROOT / "cifar" / "train.py")
         data, labels, _ = T.load_data(a.archive); order = np.random.default_rng(746).permutation(50000)
         vx, vy = data[order[45000:]], labels[order[45000:]]
-        out, rows = dict(labels=vy.astype(np.int16), class_names=np.array(CIFAR_CLASSES)), []
+        out, rows, prows = dict(labels=vy.astype(np.int16), class_names=np.array(CIFAR_CLASSES)), [], []
         for arm in ARMS:
             m = T.ResNet18(bn=arm != "sigreg").to(dev)
             m.load_state_dict(torch.load(Path(getattr(a, f"cifar_{arm}")) / "checkpoint.pt", map_location=dev, weights_only=False)["model"]); m.eval()
@@ -58,13 +67,15 @@ def main():
             for space, X in [("embedding", z), ("backbone", h)]:
                 Y = tsne(X); out[f"{arm}_tsne_{space}"] = Y
                 rows += [(arm, space, f"{x:.4f}", f"{y:.4f}", int(l), CIFAR_CLASSES[l]) for (x, y), l in zip(Y, vy)]
+                P_, var = pca(X); out[f"{arm}_pca_{space}"], out[f"{arm}_pca_var_{space}"] = P_, var
+                prows += [(arm, space, f"{x:.4f}", f"{y:.4f}", int(l), CIFAR_CLASSES[l]) for (x, y), l in zip(P_[:, :2], vy)]
             print(f"cifar {arm}: embedding {z.shape} backbone {h.shape}", flush=True)
-        np.savez_compressed(OUT / "cifar_embeddings.npz", **out); write_csv(OUT / "cifar_tsne.csv", rows)
+        np.savez_compressed(OUT / "cifar_embeddings.npz", **out); write_csv(OUT / "cifar_tsne.csv", rows); write_csv(OUT / "cifar_pca.csv", prows)
 
     if all(getattr(a, f"inet_{x}") for x in ARMS):
         I = load_module("imagenette_train", ROOT / "imagenette" / "train.py"); ViTEncoder, Views = I.ViTEncoder, I.Views
         val = DataLoader(Views(a.data, "val", V=1), batch_size=128, num_workers=4)
-        out, rows, ys = dict(class_names=np.array(INET_CLASSES)), [], None
+        out, rows, prows, ys = dict(class_names=np.array(INET_CLASSES)), [], [], None
         for arm in ARMS:
             net = ViTEncoder(proj_dim=16).cuda()
             net.load_state_dict(torch.load(Path(getattr(a, f"inet_{arm}")) / "checkpoint.pt", map_location=dev, weights_only=False)["net"]); net.eval()
@@ -77,10 +88,13 @@ def main():
             out[f"{arm}_projector"], out[f"{arm}_backbone"] = pr.astype(np.float16), emb.astype(np.float16)
             Y2 = tsne(emb); out[f"{arm}_tsne_backbone"] = Y2
             rows += [(arm, "backbone", f"{x:.4f}", f"{y:.4f}", int(l), INET_CLASSES[l]) for (x, y), l in zip(Y2, ys)]
+            for space, X in [("projector", pr), ("backbone", emb)]:
+                P_, var = pca(X); out[f"{arm}_pca_{space}"], out[f"{arm}_pca_var_{space}"] = P_, var
+                prows += [(arm, space, f"{x:.4f}", f"{y:.4f}", int(l), INET_CLASSES[l]) for (x, y), l in zip(P_[:, :2], ys)]
             print(f"imagenette {arm}: projector {pr.shape} backbone {emb.shape}", flush=True)
             del net; torch.cuda.empty_cache()
         out["labels"] = ys.astype(np.int16)
-        np.savez_compressed(OUT / "imagenette_embeddings.npz", **out); write_csv(OUT / "imagenette_tsne.csv", rows)
+        np.savez_compressed(OUT / "imagenette_embeddings.npz", **out); write_csv(OUT / "imagenette_tsne.csv", rows); write_csv(OUT / "imagenette_pca.csv", prows)
     print("saved to", OUT)
 
 

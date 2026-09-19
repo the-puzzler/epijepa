@@ -63,16 +63,19 @@ python embedding_analysis/imagenette_shapes.py --data data/imagenette2-160 \
 
 | File | Arrays |
 |---|---|
-| `cifar_embeddings.npz` | per arm `{align,epi,sigreg}_embedding` (5000×64), `_backbone` (5000×512), `_tsne_embedding` and `_tsne_backbone` (5000×2); `labels` (5000), `class_names` |
-| `imagenette_embeddings.npz` | per arm `_projector` (3925×16), `_backbone` (3925×512), `_tsne_backbone` (3925×2); `labels` (3925), `class_names` |
+| `cifar_embeddings.npz` | per arm `{align,epi,sigreg}_embedding` (5000×64), `_backbone` (5000×512), `_tsne_embedding` and `_tsne_backbone` (5000×2), `_pca_embedding` and `_pca_backbone` (5000×10 scores), `_pca_var_embedding` / `_pca_var_backbone` (explained-variance ratio, full length); `labels` (5000), `class_names` |
+| `imagenette_embeddings.npz` | per arm `_projector` (3925×16), `_backbone` (3925×512), `_tsne_backbone` (3925×2), `_pca_projector` and `_pca_backbone` (3925×10 scores), `_pca_var_projector` / `_pca_var_backbone`; `labels` (3925), `class_names` |
 | `cifar_tsne.csv`, `imagenette_tsne.csv` | the t-SNE points as `arm, space, x, y, label, class` |
+| `cifar_pca.csv`, `imagenette_pca.csv` | PC1 and PC2 scores in the same format |
 
-Raw embeddings are float16, t-SNE coordinates float32. t-SNE settings match the figure scripts
-(standardised features, PCA init, perplexity 30, random_state 0).
+Raw embeddings are float16, t-SNE and PCA coordinates float32. t-SNE settings match the figure scripts
+(standardised features, PCA init, perplexity 30, random_state 0). PCA is fit on centred raw features,
+the same covariance the spectrum panels show; `_pca_var_*` is its explained-variance ratio.
 
 ```python
 import numpy as np
 d = np.load("embedding_analysis/data/cifar_embeddings.npz")
 xy, y = d["epi_tsne_embedding"], d["labels"]      # scatter xy coloured by y
 z = d["epi_embedding"].astype(np.float32)           # 5000 x 64 raw embedding
+pc = d["epi_pca_embedding"][:, :2]                   # PC1, PC2 scores; d["epi_pca_var_embedding"] is the scree
 ```
