@@ -1,0 +1,66 @@
+{
+ "imagenette": {
+  "note": "validation split, logistic regression + 20-NN fit on train features, seed-0 checkpoints",
+  "arms": {
+   "align": {
+    "projector": {
+     "linear": 13.73248407643312,
+     "knn20": 13.452229299363058
+    },
+    "backbone": {
+     "linear": 23.46496815286624,
+     "knn20": 15.464968152866243
+    }
+   },
+   "epi": {
+    "projector": {
+     "linear": 86.34394904458598,
+     "knn20": 85.93630573248407
+    },
+    "backbone": {
+     "linear": 87.38853503184714,
+     "knn20": 85.73248407643312
+    }
+   },
+   "sigreg": {
+    "projector": {
+     "linear": 89.2484076433121,
+     "knn20": 89.04458598726114
+    },
+    "backbone": {
+     "linear": 90.26751592356688,
+     "knn20": 89.73248407643311
+    }
+   }
+  }
+ },
+ "cifar": {
+  "note": "official test split, ridge probe (alpha 1) fit on train features, mean of 3 seeds",
+  "arms": {
+   "align": {
+    "embedding": {
+     "ridge": 48.02666666666667
+    },
+    "backbone": {
+     "ridge": 68.49666666666666
+    }
+   },
+   "epi": {
+    "embedding": {
+     "ridge": 71.78
+    },
+    "backbone": {
+     "ridge": 76.64333333333332
+    }
+   },
+   "sigreg": {
+    "embedding": {
+     "ridge": 73.16666666666666
+    },
+    "backbone": {
+     "ridge": 77.53333333333332
+    }
+   }
+  }
+ }
+}

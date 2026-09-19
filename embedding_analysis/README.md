@@ -32,6 +32,25 @@ Descriptively: the score pushes toward an embedding whose coordinates are indepe
 rather than jointly Gaussian, full-rank on the embedding and somewhat lower-rank on the backbone than
 SIGReg. It prescribes no distribution and ends up with a recognisable one anyway.
 
+## Probing the projector output directly
+
+Both regularisers act on the projector output, not the backbone, so it is worth asking how much
+class information survives that bottleneck. Linear probe, validation split:
+
+| | Collapse control | Epiplexity | SIGReg |
+|---|---|---|---|
+| Imagenette, 16-d projector | 13.7 | 86.3 | 89.3 |
+| Imagenette, 512-d backbone | 23.5 | 87.4 | 90.3 |
+| CIFAR-10, 64-d embedding | 48.0 | 71.8 | 73.2 |
+| CIFAR-10, 512-d backbone | 68.5 | 76.6 | 77.5 |
+
+On Imagenette a 16-dimensional projector output gives up only about one point against the 512-d
+backbone, under either regulariser: the bottleneck is nearly free. The epiplexity-to-SIGReg gap is
+the same at the projector (2.9) as at the backbone (2.9), so the visible difference in the shape
+figures does not translate into a difference in linear separability. On CIFAR the 64-d embedding
+costs about 5 points relative to the backbone for both, and the collapse control loses far more at
+both widths. Numbers in `projector_vs_backbone_probe.json`.
+
 ## Figures
 
 | File | Content |
