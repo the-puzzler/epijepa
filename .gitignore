@@ -1,5 +1,5 @@
 runs/
-data/
+/data/
 __pycache__/
 *.pt
 *.tgz
