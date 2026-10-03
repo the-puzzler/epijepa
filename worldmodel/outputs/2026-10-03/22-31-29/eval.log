@@ -1,0 +1,3 @@
+[2026-10-03 22:31:30,344][datasets][INFO] - JAX version 0.6.2 available.
+[2026-10-03 22:31:32,879][root][INFO] - Cached 'action' from '/opt/dlami/nvme/stablewm/datasets/tworoom.h5'
+[2026-10-03 22:31:33,088][root][INFO] - Cached 'proprio' from '/opt/dlami/nvme/stablewm/datasets/tworoom.h5'

@@ -1,0 +1,2 @@
+- policy=clean_check_tw/weights_step30000.pt
+- eval.num_eval=200

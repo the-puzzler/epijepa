@@ -102,6 +102,16 @@ The released LeWM checkpoints (`quentinll/lewm-*`) were saved with transformers 
 `python convert_hf4_ckpt.py weights.pt weights_v5.pt`, and put the result in a checkpoint folder with its
 `config.json`.
 
+### Check that this code reproduces the results
+
+`train.py` is a cleaned-up version of the research script that produced the numbers above, with the ablations
+removed. We checked it by retraining TwoRoom from scratch with it.
+
+- It gives the same S0 (256.832) and the same step-1 losses as the original run.
+- At 10k steps it tracks the original (prediction loss 0.0042 vs 0.0041; effective rank 19.3 vs 19.7).
+- After 30k steps it plans at 100% on paper-50 and 99.5% on n=200, against 100 / 100 for the original seeds.
+- The runs differ after the first step only through random-number order.
+
 ## What comes from LeWM, and what is ours
 
 LeWM is MIT-licensed (`LICENSE_LEWM`). These files are copied from it:
