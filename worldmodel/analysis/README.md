@@ -1,18 +1,27 @@
 # Analysis: EpiJEPA-LeWM vs the released LeWM checkpoints
 
-All comparisons are between our best EpiJEPA checkpoint per environment (the ones on Hugging Face) and the official
-LeWM checkpoint. The scripts are re-runnable from this folder with `$STABLEWM_HOME` pointing at LeWM's datasets and
-the checkpoints (`common.py` lists exactly which).
+All comparisons are between our best EpiJEPA checkpoint per environment and the official LeWM checkpoint. The
+scripts are re-runnable from this folder with `$STABLEWM_HOME` pointing at LeWM's datasets and the checkpoints
+(`common.py` lists exactly which).
 
-| Path | What it is |
+**The bulk data is on Hugging Face,** under [basilboy/epijepa-lewm](https://huggingface.co/basilboy/epijepa-lewm/tree/main/analysis)
+(`analysis/`). That covers the embedding and trajectory CSVs, the episode videos and animations, the PCA bases, the
+probe JSONs, the training logs and every score. The figures and small summaries stay in this folder. To put the data
+back in place:
+
+```bash
+hf download basilboy/epijepa-lewm --include "analysis/*" --local-dir ..    # from worldmodel/analysis -> worldmodel/analysis/...
+```
+
+| Path (on Hugging Face unless marked here) | What it is |
 |---|---|
-| `scores/scorecard.md` | the headline table: per-seed and mean success on all three eval sets, significance tests, notes |
+| `scores/scorecard.md` (here) | the headline table: per-seed and mean success on all three eval sets, significance tests, notes |
 | `scores/all_scores.csv` | every planning result we produced (see below) |
-| `loss_curves.png`, `training_logs/*.csv` | training curves of the reported config, 3 seeds per environment |
-| `embeddings/embeddings_<env>.png/.csv` | PCA and t-SNE of 3000 random frames per environment, both models |
-| `embeddings/trajectories_<env>.csv/.png`, `embeddings/videos/` | one full episode per environment moving through each model's PCA space, with its video |
+| `loss_curves.png` (here), `training_logs/*.csv` | training curves of the reported config, 3 seeds per environment |
+| `embeddings/embeddings_<env>.png` (here), `embeddings/embeddings_<env>.csv` | PCA and t-SNE of 3000 random frames per environment, both models |
+| `embeddings/trajectories_<env>.png` (here), `embeddings/trajectories_<env>.csv`, `embeddings/videos/`, `embeddings/animations/` | one full episode per environment moving through each model's PCA space, with its video and a side-by-side animation |
 | `embeddings/pca_basis_<env>.npz`, `pca_variance_<env>.csv` | the PCA bases, to project anything else |
-| `probes/probes.json`, `probes/probes_summary.csv` | representation probes on all four environments, both models |
+| `probes/probes_summary.csv` (here), `probes/probes.json` | representation probes on all four environments, both models |
 | `probes/variant_search_{pusht,tworoom}.json` | the probes we ran while choosing the method (all variants, see below) |
 
 ## Scores (`scores/`)
@@ -51,7 +60,7 @@ To reconstruct the trajectories against the video:
   same PCA bases as `embeddings_<env>.csv`, so the episodes land on the scatter plots.
 - `trajectories_<env>.png` is a quick overlay of the episode on the scatter.
 - `python animate_trajectory.py <env>` renders the episode video side by side with the moving point in both PCA
-  spaces (written to `embeddings/animations/`, not stored in the repo). TwoRoom episode 4748 crosses the door between the rooms.
+  spaces (the rendered ones are in `embeddings/animations/` on Hugging Face). TwoRoom episode 4748 crosses the door between the rooms.
 - `pca_basis_<env>.npz` has `<model>_mean`, `<model>_components` (50×192) and `<model>_explained_variance_ratio`.
   The coordinates are `(z - mean) @ components.T`.
 

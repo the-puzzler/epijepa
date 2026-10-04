@@ -110,6 +110,8 @@ starts:
 These are success rates (%), averaged over 3 seeds. Code, training budgets, evaluation details, embeddings, probes
 and all scores are in [worldmodel/](worldmodel/).
 
+![Cube episode in each model's PCA space](worldmodel/assets/cube_pca.gif)
+
 ## Run the experiments
 
 Run these commands from the repository root:

@@ -47,6 +47,17 @@ and n=500. Per-seed numbers, all checkpoints and the λ sweeps are in [`analysis
 
 The best checkpoint per environment is on Hugging Face: [basilboy/epijepa-lewm](https://huggingface.co/basilboy/epijepa-lewm).
 
+### What the latent looks like
+
+![Cube episode: video next to the moving point in each model's PCA space](assets/cube_pca.gif)
+
+This is one Cube episode, shown next to the same moment in each model's planning latent (the first two principal
+components, over 3000 random frames). In EpiJEPA's latent the arm and block move along a smooth, structured manifold.
+The released LeWM latent is a more diffuse cloud. The episode data behind this (frame-by-frame coordinates, true
+state and video), the same for every environment, plus all embeddings, probes, training logs and scores, is in the
+Hugging Face repo under [`analysis/`](https://huggingface.co/basilboy/epijepa-lewm/tree/main/analysis). See
+[`analysis/`](analysis/) for the figures and how to use it.
+
 ## Reproducing
 
 ### Setup
