@@ -156,7 +156,7 @@ def main():
             if step % cfg.log_every == 0 or step == 1:
                 with torch.no_grad():
                     epi_ratio = float(s) if use_epi else float(epiplexity(flat.detach(), pix, reservoir)) / S0
-                row = dict(step=step, epoch=epoch, loss=float(loss), pred=float(l_pred), sigreg=float(l_sig),
+                row = dict(step=step, epoch=epoch, loss=loss.item(), pred=l_pred.item(), sigreg=l_sig.item(),
                            epi_ratio=epi_ratio, erank=effective_rank(flat.detach()), grad_norm=float(gn),
                            lr=sched.get_last_lr()[0], it_s=step / (time.time() - t0))
                 log.append(row)
