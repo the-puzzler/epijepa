@@ -7,10 +7,10 @@ For each environment, N random dataset frames are encoded by both models and a P
   embeddings_<env>.png      rows = state labels (colour), columns = model x {PCA, t-SNE}
   pca_variance_<env>.csv    explained-variance ratio of the first 30 PCs per model
   pca_basis_<env>.npz       per model: mean (192,), components (50, 192), explained_variance_ratio (50,)
-  trajectories_<env>.csv    N_EP full episodes, one row per frame: episode, step (= frame index in the video), true
+  trajectories_<env>.csv    the showcased episode (EPISODES), one row per frame: episode, step (= frame index in the video), true
                             state, and per model pca1/pca2/pca3 in that model's PCA basis above
-  videos/<env>_ep<episode>.mp4   the frames of each of those episodes, 10 fps, frame i = step i
-  trajectories_<env>.png    the episodes drawn on top of the PCA scatter (colour = time)
+  videos/<env>_ep<episode>.mp4   the frames of that episode, 10 fps, frame i = step i
+  trajectories_<env>.png    the episode drawn on top of the PCA scatter (colour = time)
 usage: python embeddings.py [env ...]     (default: all four; run with $STABLEWM_HOME set)
 """
 import os
@@ -31,24 +31,23 @@ from sklearn.manifold import TSNE
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # worldmodel/ (module.ProjectorBN)
 from common import DATA, ENVS, encode, load_rows, sample_rows  # noqa: E402
 
-N, N_EP, FPS = 3000, 5, 10
+N, FPS = 3000, 10
+EPISODES = {"tworoom": [4748], "pusht": [630], "cube": [348], "reacher": [348]}  # TwoRoom 4748 crosses the door
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "embeddings")
 MODELS = [("epijepa", "ours"), ("released_lewm", "released")]
 
 
-def episode_rows(env, n, seed=1):
-    """Rows of n random episodes (of at least median length), as a list of (episode id, row array)."""
+def episode_rows(env):
+    """Rows of the showcased episode(s) of this environment, as a list of (episode id, row array)."""
     with h5py.File(os.path.join(DATA, ENVS[env]["h5"]), "r") as f:
         offs, lens = f["ep_offset"][:], f["ep_len"][:]
-    ok = np.nonzero(lens >= np.median(lens))[0]
-    eps = np.sort(np.random.default_rng(seed).choice(ok, n, replace=False))
-    return [(int(e), np.arange(offs[e], offs[e] + lens[e])) for e in eps]
+    return [(e, np.arange(offs[e], offs[e] + lens[e])) for e in EPISODES[env]]
 
 
 def run(env):
     rows = sample_rows(env, N, seed=0)
     pix, labels = load_rows(env, rows)
-    episodes = [(e, *load_rows(env, r)) for e, r in episode_rows(env, N_EP)]
+    episodes = [(e, *load_rows(env, r)) for e, r in episode_rows(env)]
     df = pd.DataFrame({"row": rows, **labels})
     traj = pd.concat([pd.DataFrame(lab) for _, _, lab in episodes], ignore_index=True)
     var, basis = {}, {}
@@ -99,7 +98,7 @@ def run(env):
             t = traj[traj.episode == e]
             a.plot(t[f"{tag}_pca1"], t[f"{tag}_pca2"], lw=0.6, color="k", alpha=0.4)
             a.scatter(t[f"{tag}_pca1"], t[f"{tag}_pca2"], c=t.step, cmap="plasma", s=4)
-        a.set_title(f"{tag}: {N_EP} episodes in PCA space (colour = step)", fontsize=9)
+        a.set_title(f"{tag}: episode in PCA space (colour = step)", fontsize=9)
         a.set_xlabel("PC1"); a.set_ylabel("PC2")
     plt.tight_layout(); plt.savefig(f"{OUT}/trajectories_{env}.png", dpi=90); plt.close(fig)
     print(f"{env}: saved", flush=True)

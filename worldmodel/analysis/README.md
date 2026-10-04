@@ -10,7 +10,7 @@ the checkpoints (`common.py` lists exactly which).
 | `scores/all_scores.csv` | every planning result we produced (see below) |
 | `loss_curves.png`, `training_logs/*.csv` | training curves of the reported config, 3 seeds per environment |
 | `embeddings/embeddings_<env>.png/.csv` | PCA and t-SNE of 3000 random frames per environment, both models |
-| `embeddings/trajectories_<env>.csv/.png`, `embeddings/videos/` | whole episodes moving through each model's PCA space, with the videos |
+| `embeddings/trajectories_<env>.csv/.png`, `embeddings/videos/` | one full episode per environment moving through each model's PCA space, with its video |
 | `embeddings/pca_basis_<env>.npz`, `pca_variance_<env>.csv` | the PCA bases, to project anything else |
 | `probes/probes.json`, `probes/probes_summary.csv` | representation probes on all four environments, both models |
 | `probes/variant_search_{pusht,tworoom}.json` | the probes we ran while choosing the method (all variants, see below) |
@@ -45,13 +45,13 @@ TwoRoom's and Reacher's targets are not rendered in the frame, so they are left 
 
 To reconstruct the trajectories against the video:
 
-- `trajectories_<env>.csv` holds 5 full episodes, one row per frame. `episode` and `step` identify the frame, and row
+- `trajectories_<env>.csv` holds one full episode, one row per frame (TwoRoom 4748, Push-T 630, Cube 348, Reacher 348). `episode` and `step` identify the frame, and row
   `step == i` is frame `i` of `videos/<env>_ep<episode>.mp4` (10 fps).
 - The true state comes next, then `epijepa_pca{1,2,3}` and `released_lewm_pca{1,2,3}`. These are coordinates in the
   same PCA bases as `embeddings_<env>.csv`, so the episodes land on the scatter plots.
-- `trajectories_<env>.png` is a quick overlay of the episodes on the scatter.
-- `animations/<env>_ep<episode>_pca.mp4` (from `animate_trajectory.py <env> [episode]`) shows the episode video
-  side by side with the moving point in both PCA spaces. TwoRoom episode 4748 crosses the door between the rooms.
+- `trajectories_<env>.png` is a quick overlay of the episode on the scatter.
+- `python animate_trajectory.py <env>` renders the episode video side by side with the moving point in both PCA
+  spaces (written to `embeddings/animations/`, not stored in the repo). TwoRoom episode 4748 crosses the door between the rooms.
 - `pca_basis_<env>.npz` has `<model>_mean`, `<model>_components` (50×192) and `<model>_explained_variance_ratio`.
   The coordinates are `(z - mean) @ components.T`.
 
