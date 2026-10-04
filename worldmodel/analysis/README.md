@@ -50,6 +50,8 @@ To reconstruct the trajectories against the video:
 - The true state comes next, then `epijepa_pca{1,2,3}` and `released_lewm_pca{1,2,3}`. These are coordinates in the
   same PCA bases as `embeddings_<env>.csv`, so the episodes land on the scatter plots.
 - `trajectories_<env>.png` is a quick overlay of the episodes on the scatter.
+- `animations/<env>_ep<episode>_pca.mp4` (from `animate_trajectory.py <env> [episode]`) shows the episode video
+  side by side with the moving point in both PCA spaces. TwoRoom episode 4748 crosses the door between the rooms.
 - `pca_basis_<env>.npz` has `<model>_mean`, `<model>_components` (50×192) and `<model>_explained_variance_ratio`.
   The coordinates are `(z - mean) @ components.T`.
 
