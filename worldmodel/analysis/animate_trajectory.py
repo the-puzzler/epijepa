@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 HERE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "embeddings")
-MODELS = [("epijepa", "EpiJEPA (ours)"), ("released_lewm", "released LeWM")]
+MODELS = [("epiwm", "EpiWM (ours)"), ("released_lewm", "released LeWM")]
 
 
 def main(env, episode=None):

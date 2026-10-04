@@ -2,7 +2,7 @@
 
   scores/all_scores.csv    one row per (run, checkpoint, eval set) with the default LeWM CEM planner:
                            paper50 (LeWM's own eval: 50 episodes, seed 42), n200, n500 (same sampler, more starts)
-  training_logs/<run>.csv  train + validation curves of the reported EpiJEPA config per environment (3 seeds)
+  training_logs/<run>.csv  train + validation curves of the reported EpiWM config per environment (3 seeds)
 Variant runs (alternative epiplexity forms, ablations) are included in all_scores.csv so the search is visible;
 only the main method (variant == "epi") and the SIGReg control are part of the released code.
 usage: python collect.py <results_dir> <released_eval_dir>

@@ -4,7 +4,7 @@ Labels are the parts of the true state that are visible in the frame (TwoRoom's 
 not rendered, so they are left out; the cube's yaw is only defined up to its 90-degree symmetry).
 
 Checkpoints are resolved by stable_worldmodel's load_pretrained relative to $STABLEWM_HOME/checkpoints:
-  ours      the best EpiJEPA checkpoint per environment (the ones uploaded to Hugging Face)
+  ours      the best EpiWM checkpoint per environment (the ones uploaded to Hugging Face)
   released  the official LeWM checkpoint (HF quentinll/lewm-*, keys renamed with ../convert_hf4_ckpt.py)
 """
 import os

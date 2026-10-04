@@ -286,10 +286,10 @@ class ARPredictor(nn.Module):
 
 
 # ---------------------------------------------------------------------------
-# Added for EpiJEPA (not part of LeWM): the only architectural change of the Epi arm.
+# Added for EpiWM (not part of LeWM): the only architectural change of the Epi arm.
 # ---------------------------------------------------------------------------
 class ProjectorBN(nn.Module):
-    """LeWM projector followed by a non-affine BatchNorm on the output (EpiJEPA arm).
+    """LeWM projector followed by a non-affine BatchNorm on the output (EpiWM).
 
     The epiplexity score grows without bound with the embedding scale, so the scale is pinned
     here, exactly as the CIFAR/Imagenette EpiJEPA encoders do. SIGReg needs no such layer: its

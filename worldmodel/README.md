@@ -1,4 +1,4 @@
-# EpiJEPA as the anti-collapse term of LeWorldModel
+# EpiWM: epiplexity as the anti-collapse term of LeWorldModel
 
 [LeWorldModel](https://github.com/lucas-maes/le-wm) (LeWM) learns a latent world model end-to-end from pixels and plans
 in its latent space with CEM. To stop the embedding collapsing it adds **SIGReg**, which pushes the embeddings
@@ -9,12 +9,12 @@ the planner and evaluation.
 
 ```
 SIGReg (LeWM):  loss = ||pred(z_t, a_t) - z_t+1||^2 + 0.09 * SIGReg(z)
-EpiJEPA:        loss = ||pred(z_t, a_t) - z_t+1||^2 - lambda * S(z) / S0
+EpiWM:          loss = ||pred(z_t, a_t) - z_t+1||^2 - lambda * S(z) / S0
                 S  = epiplexity of the embeddings w.r.t. a frozen random CNN reservoir of the frames
                 S0 = S of the untrained model (average over 4 batches)
 ```
 
-The EpiJEPA model has one architectural change: a non-affine BatchNorm on the projector output
+EpiWM has one architectural change: a non-affine BatchNorm on the projector output
 (`module.ProjectorBN`). The score grows with the embedding scale, so the scale is pinned, as in the CIFAR and
 Imagenette EpiJEPA encoders. SIGReg does not need this because its N(0, I) target already fixes the scale.
 
@@ -25,18 +25,18 @@ report the mean over 3 seeds. "Released" is the official LeWM checkpoint (about 
 
 | Environment | Model (steps, seeds) | paper-50 | n=200 | n=500 |
 |---|---|---|---|---|
-| TwoRoom | **EpiJEPA** λ=0.03 (30k, 3) | **100** | **100** | **99.9** |
+| TwoRoom | **EpiWM** λ=0.03 (30k, 3) | **100** | **100** | **99.9** |
 | | released LeWM | 86 | 85.0 | 82.8 |
-| Push-T | **EpiJEPA** λ=0.1 (60k, 3) | 92 | **89.3** | 88.5 |
+| Push-T | **EpiWM** λ=0.1 (60k, 3) | 92 | **89.3** | 88.5 |
 | | released LeWM | 96 | 83.5 | 84.6 |
-| Cube | **EpiJEPA** λ=0.03 (60k, 3) | 70.7 | **73.2** | **71.5** |
+| Cube | **EpiWM** λ=0.03 (60k, 3) | 70.7 | **73.2** | **71.5** |
 | | released LeWM | 68 | 63.0 | 66.0 |
-| Reacher | **EpiJEPA** λ=0.3 (200k, 3) | **72.7** | **72.0** | **73.5** |
+| Reacher | **EpiWM** λ=0.3 (200k, 3) | **72.7** | **72.0** | **73.5** |
 | | released LeWM | 52 | 62.0 | 60.8 |
 
 On n=500, with Fisher's exact test over pooled seeds:
 
-- **Against the released checkpoints,** EpiJEPA is better on all four environments:
+- **Against the released checkpoints,** EpiWM is better on all four environments:
   - TwoRoom: 99.9 vs 82.8.
   - Cube: 71.5 vs 66.0 (p = 0.02).
   - Push-T: 88.5 vs 84.6.
@@ -45,17 +45,17 @@ On n=500, with Fisher's exact test over pooled seeds:
 The paper-50 set is noisy. For example, the released Push-T checkpoint scores 96 on it but 83.5 and 84.6 on n=200
 and n=500. Per-seed numbers, all checkpoints and the λ sweeps are in [`analysis/`](analysis/).
 
-The best checkpoint per environment is on Hugging Face: [basilboy/epijepa-lewm](https://huggingface.co/basilboy/epijepa-lewm).
+The best checkpoint per environment is on Hugging Face: [basilboy/epiwm](https://huggingface.co/basilboy/epiwm).
 
 ### What the latent looks like
 
 ![Cube episode: video next to the moving point in each model's PCA space](assets/cube_pca.gif)
 
 This is one Cube episode, shown next to the same moment in each model's planning latent (the first two principal
-components, over 3000 random frames). In EpiJEPA's latent the arm and block move along a smooth, structured manifold.
+components, over 3000 random frames). In EpiWM's latent the arm and block move along a smooth, structured manifold.
 The released LeWM latent is a more diffuse cloud. The episode data behind this (frame-by-frame coordinates, true
 state and video), the same for every environment, plus all embeddings, probes, training logs and scores, is in the
-Hugging Face repo under [`analysis/`](https://huggingface.co/basilboy/epijepa-lewm/tree/main/analysis). See
+Hugging Face repo under [`analysis/`](https://huggingface.co/basilboy/epiwm/tree/main/analysis). See
 [`analysis/`](analysis/) for the figures and how to use it.
 
 ## Reproducing
@@ -77,7 +77,7 @@ export STABLEWM_HOME=/path/to/stablewm MUJOCO_GL=egl
 
 The steps below are the best training budget per environment. They matter for reproduction, because the cosine
 schedule spans `max_steps`. Planning success is not monotone in training length: on Push-T both regularisers peak
-around 60k steps (EpiJEPA at 200k reaches only 81.5), while Reacher keeps improving up to 200k.
+around 60k steps (EpiWM at 200k reaches only 81.5), while Reacher keeps improving up to 200k.
 
 | Environment | `data=` | λ | Steps | Our wall clock (1 GPU, shared 4 ways) |
 |---|---|---|---|---|
@@ -130,7 +130,7 @@ LeWM is MIT-licensed (`LICENSE_LEWM`). These files are copied from it:
 - `utils.py`: verbatim (dataset transforms and normalisers).
 - `module.py`: verbatim LeWM modules, including SIGReg. Only `ProjectorBN` at the bottom is ours.
 - `eval.py`: LeWM's evaluation script. Our only change is the optional `+eval_chunk` (three lines marked
-  `[EpiJEPA addition]`), which splits one evaluation across several processes to save host RAM; Cube needs this at
+  `[EpiWM addition]`), which splits one evaluation across several processes to save host RAM; Cube needs this at
   n≥200.
 - `config/eval/*`: verbatim, covering the planner (CEM: 300 samples, 30 iterations, top-30, horizon 5, action
   block 5) and the evaluation settings.

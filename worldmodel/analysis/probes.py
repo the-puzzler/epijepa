@@ -1,4 +1,4 @@
-"""Representation probes, identical for both models (our best EpiJEPA checkpoint and the released LeWM one):
+"""Representation probes, identical for both models (our best EpiWM checkpoint and the released LeWM one):
   linear_r2 / mlp_r2   how well the true state is decodable from the latent z_t (ridge / 2-layer MLP; 2000 train,
                        400 test windows). Angles are probed as (sin, cos) (cube yaw modulo its 90-degree symmetry).
   rollout_err          open-loop rollout with the true actions for 5 steps; the state decoded from the predicted
@@ -31,7 +31,7 @@ H = 5                       # rollout horizon (steps of frameskip 5)
 N_TRAIN, N_TEST = 2000, 400
 ANGLES = {"block_angle": 1, "block_yaw": 4, "joint_0": 1, "joint_1": 1}  # name -> symmetry order (cube: 4-fold)
 DATA_CFG = {"tworoom": "tworoom", "pusht": "pusht", "cube": "ogb", "reacher": "dmc"}
-MODELS = [("epijepa", "ours"), ("released_lewm", "released")]
+MODELS = [("epiwm", "ours"), ("released_lewm", "released")]
 OUT = os.path.join(HERE, "probes")
 
 

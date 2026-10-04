@@ -55,7 +55,7 @@ def run(cfg: DictConfig):
 
     # create world environment
     cfg.world.max_episode_steps = 2 * cfg.eval.eval_budget
-    # [EpiJEPA addition] optional +eval_chunk="i/n": sample the SAME num_eval starts as usual but evaluate only chunk i
+    # [EpiWM addition] optional +eval_chunk="i/n": sample the SAME num_eval starts as usual but evaluate only chunk i
     # of n (fewer parallel envs -> less host RAM; Cube at num_eval>=200 needs it). Pooling the n chunks reproduces
     # the full eval's start set exactly.
     chunk = cfg.get("eval_chunk")
@@ -134,7 +134,7 @@ def run(cfg: DictConfig):
 
     # sort increasingly to avoid issues with HDF5Dataset indexing
     random_episode_indices = np.sort(valid_indices[random_episode_indices])
-    if chunk:  # [EpiJEPA addition]
+    if chunk:  # [EpiWM addition]
         random_episode_indices = np.array_split(random_episode_indices, cn)[ci]
 
     print(random_episode_indices)
@@ -142,7 +142,7 @@ def run(cfg: DictConfig):
     eval_episodes = dataset.get_row_data(random_episode_indices)[col_name]
     eval_start_idx = dataset.get_row_data(random_episode_indices)["step_idx"]
 
-    if len(eval_episodes) < (cfg.world.num_envs if chunk else cfg.eval.num_eval):  # [EpiJEPA addition: chunk-aware]
+    if len(eval_episodes) < (cfg.world.num_envs if chunk else cfg.eval.num_eval):  # [EpiWM addition: chunk-aware]
         raise ValueError("Not enough episodes with sufficient length for evaluation.")
 
     world.set_policy(policy)

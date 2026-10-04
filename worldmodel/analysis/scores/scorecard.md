@@ -1,4 +1,4 @@
-# EpiJEPA-LeWM vs the released LeWM checkpoints — final scorecard
+# EpiWM vs the released LeWM checkpoints — final scorecard
 
 Planning success rate (%). Same architecture as the released LeWM checkpoints; Epi replaces SIGReg with the
 epiplexity score + one non-affine BatchNorm on the projector output. CEM planner, LeWM defaults (300 samples,

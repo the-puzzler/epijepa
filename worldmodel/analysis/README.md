@@ -1,16 +1,16 @@
-# Analysis: EpiJEPA-LeWM vs the released LeWM checkpoints
+# Analysis: EpiWM vs the released LeWM checkpoints
 
-All comparisons are between our best EpiJEPA checkpoint per environment and the official LeWM checkpoint. The
+All comparisons are between our best EpiWM checkpoint per environment and the official LeWM checkpoint. The
 scripts are re-runnable from this folder with `$STABLEWM_HOME` pointing at LeWM's datasets and the checkpoints
 (`common.py` lists exactly which).
 
-**The bulk data is on Hugging Face,** under [basilboy/epijepa-lewm](https://huggingface.co/basilboy/epijepa-lewm/tree/main/analysis)
+**The bulk data is on Hugging Face,** under [basilboy/epiwm](https://huggingface.co/basilboy/epiwm/tree/main/analysis)
 (`analysis/`). That covers the embedding and trajectory CSVs, the episode videos and animations, the PCA bases, the
 probe JSONs, the training logs and every score. The figures and small summaries stay in this folder. To put the data
 back in place:
 
 ```bash
-hf download basilboy/epijepa-lewm --include "analysis/*" --local-dir ..    # from worldmodel/analysis -> worldmodel/analysis/...
+hf download basilboy/epiwm --include "analysis/*" --local-dir ..    # from worldmodel/analysis -> worldmodel/analysis/...
 ```
 
 | Path (on Hugging Face unless marked here) | What it is |
@@ -56,7 +56,7 @@ To reconstruct the trajectories against the video:
 
 - `trajectories_<env>.csv` holds one full episode, one row per frame (TwoRoom 4748, Push-T 630, Cube 348, Reacher 348). `episode` and `step` identify the frame, and row
   `step == i` is frame `i` of `videos/<env>_ep<episode>.mp4` (10 fps).
-- The true state comes next, then `epijepa_pca{1,2,3}` and `released_lewm_pca{1,2,3}`. These are coordinates in the
+- The true state comes next, then `epiwm_pca{1,2,3}` and `released_lewm_pca{1,2,3}`. These are coordinates in the
   same PCA bases as `embeddings_<env>.csv`, so the episodes land on the scatter plots.
 - `trajectories_<env>.png` is a quick overlay of the episode on the scatter.
 - `python animate_trajectory.py <env>` renders the episode video side by side with the moving point in both PCA
@@ -80,13 +80,13 @@ to test):
 
 | Environment | Model | linear R² | MLP R² | rollout err t=1 / t=5 | goal-rank ρ | eff. rank | top-2 PC var |
 |---|---|---|---|---|---|---|---|
-| tworoom | epijepa | 0.998 | 1.000 | 0.041 / 0.070 | 0.670 | 34 | 0.81 |
+| tworoom | epiwm | 0.998 | 1.000 | 0.041 / 0.070 | 0.670 | 34 | 0.81 |
 | tworoom | released_lewm | 0.979 | 1.000 | 0.477 / 0.501 | 0.270 | 114 | 0.05 |
-| pusht | epijepa | 0.956 | 0.982 | 0.133 / 0.131 | 0.879 | 181 | 0.04 |
+| pusht | epiwm | 0.956 | 0.982 | 0.133 / 0.131 | 0.879 | 181 | 0.04 |
 | pusht | released_lewm | 0.938 | 0.983 | 0.179 / 0.201 | 0.924 | 116 | 0.04 |
-| cube | epijepa | 0.725 | 0.645 | 0.300 / 0.298 | 0.457 | 92 | 0.23 |
+| cube | epiwm | 0.725 | 0.645 | 0.300 / 0.298 | 0.457 | 92 | 0.23 |
 | cube | released_lewm | 0.767 | 0.648 | 0.282 / 0.291 | 0.726 | 126 | 0.03 |
-| reacher | epijepa | 0.999 | 1.000 | 0.063 / 0.079 | 0.469 | 181 | 0.03 |
+| reacher | epiwm | 0.999 | 1.000 | 0.063 / 0.079 | 0.469 | 181 | 0.03 |
 | reacher | released_lewm | 0.997 | 1.000 | 0.081 / 0.100 | 0.546 | 95 | 0.04 |
 
 What the probes show:
@@ -101,7 +101,7 @@ What the probes show:
 - **Cube's** mean R² is lower for both models because the block yaw is hard to read, even modulo its symmetry.
 
 `variant_search_{pusht,tworoom}.json` are the probes from method selection. They cover the released model, our
-SIGReg retrain and every EpiJEPA form we tried:
+SIGReg retrain and every epiplexity form we tried:
 
 - `epi_*`: the main method at each λ.
 - `epipredmlp_*`: an MLP reservoir on the predictor.

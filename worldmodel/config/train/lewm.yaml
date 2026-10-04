@@ -36,7 +36,7 @@ optimizer:
 num_preds: 1
 
 loss:
-  reg: sigreg          # sigreg (LeWM) | epi (EpiJEPA); for epi also set model=lewm_epi
+  reg: sigreg          # sigreg (LeWM) | epi (EpiWM); for epi also set model=epi
   epi:
     weight: 0.03       # lambda_e: loss = pred - weight * S / S0
     width: 192         # reservoir width = embed_dim, so the log-det can reward every embedding direction

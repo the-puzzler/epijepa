@@ -1,5 +1,5 @@
 # Exact architecture of the released LeWM checkpoints (quentinll/lewm-*/config.json), library classes.
-# EpiJEPA arm: identical except a non-affine BatchNorm on the projector output (module.ProjectorBN).
+# EpiWM: identical except a non-affine BatchNorm on the projector output (module.ProjectorBN).
 _target_: stable_worldmodel.wm.lewm.LeWM
 encoder:
   _target_: stable_pretraining.backbone.utils.vit_hf

@@ -1,5 +1,5 @@
 embeddings/animations/
-# bulk data lives on Hugging Face (basilboy/epijepa-lewm, analysis/); the scripts still write it here
+# bulk data lives on Hugging Face (basilboy/epiwm, analysis/); the scripts still write it here
 embeddings/*.csv
 embeddings/*.npz
 embeddings/videos/

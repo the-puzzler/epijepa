@@ -1,4 +1,4 @@
-"""PCA and t-SNE of the planning latent (projector output) for our best EpiJEPA model and the released LeWM model,
+"""PCA and t-SNE of the planning latent (projector output) for our best EpiWM model and the released LeWM model,
 plus whole episodes projected into each model's PCA space (with the episode videos).
 
 For each environment, N random dataset frames are encoded by both models and a PCA is fitted per model. We save
@@ -34,7 +34,7 @@ from common import DATA, ENVS, encode, load_rows, sample_rows  # noqa: E402
 N, FPS = 3000, 10
 EPISODES = {"tworoom": [4748], "pusht": [630], "cube": [348], "reacher": [348]}  # TwoRoom 4748 crosses the door
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "embeddings")
-MODELS = [("epijepa", "ours"), ("released_lewm", "released")]
+MODELS = [("epiwm", "ours"), ("released_lewm", "released")]
 
 
 def episode_rows(env):

@@ -1,4 +1,4 @@
-"""Training curves of the reported EpiJEPA config per environment, 3 seeds each (training_logs/*.csv, from collect.py).
+"""Training curves of the reported EpiWM config per environment, 3 seeds each (training_logs/*.csv, from collect.py).
 Rows: prediction loss (train), prediction loss (validation, every 10k/20k steps), epiplexity ratio S/S0 (the term
 being maximised), effective rank of the embeddings. Each environment runs to its own best budget (30k/60k/60k/200k).
 usage: python loss_curves.py   -> loss_curves.png

@@ -1,4 +1,4 @@
-"""Train LeWM with either SIGReg (LeWM's anti-collapse term) or epiplexity (EpiJEPA) as the regulariser.
+"""Train LeWM with either SIGReg (LeWM's anti-collapse term) or epiplexity (EpiWM; the score is from EpiJEPA) as the regulariser.
 
 Everything except the regulariser is LeWM's own recipe: the released checkpoints' architecture (ViT-tiny encoder,
 AdaLN predictor, MLP projectors; config/train/model/*.yaml), the dataset and transforms (utils.py, verbatim from
