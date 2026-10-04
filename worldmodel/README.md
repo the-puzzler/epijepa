@@ -45,7 +45,7 @@ On n=500, with Fisher's exact test over pooled seeds:
 The paper-50 set is noisy. For example, the released Push-T checkpoint scores 96 on it but 83.5 and 84.6 on n=200
 and n=500. Per-seed numbers, all checkpoints and the λ sweeps are in [`analysis/`](analysis/).
 
-The best checkpoint per environment is on Hugging Face: `HF_REPO_PLACEHOLDER`.
+The best checkpoint per environment is on Hugging Face: [basilboy/epijepa-lewm](https://huggingface.co/basilboy/epijepa-lewm).
 
 ## Reproducing
 
