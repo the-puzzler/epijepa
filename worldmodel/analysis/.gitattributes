@@ -1,0 +1,4 @@
+# Analysis outputs written by the scripts in this folder: collapse them in diffs and keep them out of language stats.
+*.csv linguist-generated=true
+*.json linguist-generated=true
+*.npz linguist-generated=true
