@@ -1,0 +1,9 @@
+embeddings/animations/
+# bulk data lives on Hugging Face (basilboy/epiwm, analysis/); the scripts still write it here
+embeddings/*.csv
+embeddings/*.npz
+embeddings/videos/
+training_logs/
+probes/probes.json
+probes/variant_search_*.json
+scores/all_scores.csv

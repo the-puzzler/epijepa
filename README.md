@@ -93,6 +93,28 @@ EpiJEPA's CIFAR embeddings have heavier tails and lower average absolute coordin
 
 Figures, metrics, exported embeddings and analysis scripts are in [embedding_analysis/](embedding_analysis/).
 
+### EpiWM: replacing SIGReg in LeWorldModel
+
+The same score works as the anti-collapse term of a latent world model trained for planning. We swapped SIGReg for
+epiplexity in [LeWorldModel](https://github.com/lucas-maes/le-wm), keeping its architecture, data, schedule and CEM
+planner. On 500 test starts, EpiWM plans better than the released LeWM checkpoints on all four of LeWM's
+benchmarks. It also beats LeWM's SIGReg recipe retrained by us at the same budget on three of them, and ties it on
+Push-T:
+
+| Environment | EpiWM | SIGReg retrain | Released LeWM |
+|---|---|---|---|
+| TwoRoom | 99.9 | 87.9 | 82.8 |
+| Push-T | 88.5 | 88.6 | 84.6 |
+| Cube | 71.5 | 65.5 | 66.0 |
+| Reacher | 73.5 | 62.2 | 60.8 |
+
+These are success rates (%): the mean over 3 seeds for EpiWM and 2 seeds for the SIGReg retrain. The released column
+is our measurement of the official checkpoints with LeWM's released evaluation. On Reacher this differs from the
+paper's setting (random-policy data rather than SAC; see [worldmodel/](worldmodel/)). Code, training budgets,
+evaluation details, embeddings, probes and all scores are in [worldmodel/](worldmodel/).
+
+![Cube episode in each model's PCA space](worldmodel/assets/cube_pca.gif)
+
 ## Run the experiments
 
 Run these commands from the repository root:
@@ -141,4 +163,5 @@ imagenette/probe.py   Frozen-backbone linear and nearest-neighbour probes
 imagenette/analyze.py Imagenette table and figure
 results/              Saved result tables and figures
 embedding_analysis/   Embedding exports, shape metrics, figures and analysis scripts
+worldmodel/           EpiWM (EpiJEPA in LeWorldModel): training, LeWM evaluation, analysis (see worldmodel/README.md)
 ```
