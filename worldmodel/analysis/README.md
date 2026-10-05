@@ -32,7 +32,7 @@ columns are:
 | Column | Meaning |
 |---|---|
 | `env`, `run`, `seed`, `step` | where the number comes from (`step` is the checkpoint) |
-| `variant` | `epi` is the main method; rows marked `ablation: ...` are the alternatives we tried; `sigreg` is LeWM's recipe retrained by us (kept for completeness, not part of the reported comparison) |
+| `variant` | `epi` is the main method; rows marked `ablation: ...` are the alternatives we tried; `sigreg` is LeWM's recipe retrained by us. The reported SIGReg retrain is `tw_sigreg_0.09`, `pusht_sigreg_0.09_60k`, `cube_sigreg_0.09` and `rch_sigreg_0.09_200k`, plus their `_seed2` runs, at the same budget as EpiWM; the other `sigreg` runs are shorter schedules |
 | `lam`, `max_steps` | the λ and the training budget (the cosine schedule spans `max_steps`) |
 | `eval_set` | `paper50` = LeWM's own evaluation (50 episodes, seed 42); `n200` and `n500` = the same sampler with more starts |
 | `success_rate`, `n_episodes` | the score in % and the number of episodes behind it |

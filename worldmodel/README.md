@@ -21,26 +21,53 @@ Imagenette EpiJEPA encoders. SIGReg does not need this because its N(0, I) targe
 ## Results
 
 Planning success rate (%) with LeWM's CEM planner. There are three evaluation sets (see *Evaluation* below), and we
-report the mean over 3 seeds. "Released" is the official LeWM checkpoint (about 200k steps).
+report the mean over seeds. The rows are:
+
+- **EpiWM:** 3 seeds.
+- **SIGReg retrain:** LeWM's own recipe (SIGReg, weight 0.09) trained by us with the same loop, data and budget as
+  EpiWM, 2 seeds. This isolates the regulariser.
+- **Released LeWM:** the official checkpoint (about 200k steps), evaluated by us with LeWM's unmodified released
+  evaluation.
 
 | Environment | Model (steps, seeds) | paper-50 | n=200 | n=500 |
 |---|---|---|---|---|
 | TwoRoom | **EpiWM** λ=0.03 (30k, 3) | **100** | **100** | **99.9** |
+| | SIGReg retrain (30k, 2) | 89 | 85.5 | 87.9 |
 | | released LeWM | 86 | 85.0 | 82.8 |
 | Push-T | **EpiWM** λ=0.1 (60k, 3) | 92 | **89.3** | 88.5 |
-| | released LeWM | 96 | 83.5 | 84.6 |
+| | SIGReg retrain (60k, 2) | 89 | 87.3 | **88.6** |
+| | released LeWM | **96** | 83.5 | 84.6 |
 | Cube | **EpiWM** λ=0.03 (60k, 3) | 70.7 | **73.2** | **71.5** |
+| | SIGReg retrain (60k, 2) | **73** | 64.0 | 65.5 |
 | | released LeWM | 68 | 63.0 | 66.0 |
 | Reacher | **EpiWM** λ=0.3 (200k, 3) | **72.7** | **72.0** | **73.5** |
+| | SIGReg retrain (200k, 2) | 60 | 62.5 | 62.2 |
 | | released LeWM | 52 | 62.0 | 60.8 |
 
 On n=500, with Fisher's exact test over pooled seeds:
 
+- **Against the SIGReg retrain at the same budget,** EpiWM is better on three environments and ties on Push-T:
+  - TwoRoom: 99.9 vs 87.9 (p ≈ 5e-49).
+  - Cube: 71.5 vs 65.5 (p = 0.002).
+  - Reacher: 73.5 vs 62.2 (p ≈ 3e-9).
+  - Push-T: 88.5 vs 88.6 (p = 0.95).
 - **Against the released checkpoints,** EpiWM is better on all four environments:
   - TwoRoom: 99.9 vs 82.8.
   - Cube: 71.5 vs 66.0 (p = 0.02).
   - Push-T: 88.5 vs 84.6.
   - Reacher: 73.5 vs 60.8 at the same ~200k-step budget (p ≈ 1e-7).
+
+The released-LeWM numbers are our measurements and can differ from the LeWM paper's figures. This matters most for
+Reacher, where the paper reports 86:
+
+- The paper trained and evaluated Reacher on data collected by a SAC policy.
+- The released dataset, evaluation config and checkpoint all use random-policy data instead.
+- LeWM's unmodified `eval.py` gives the same 52 on paper-50 as ours, with the same per-task outcomes.
+- The paper's Reacher setting cannot be reproduced from the released artifacts.
+
+Everything in the table, EpiWM and the SIGReg retrain included, uses the released random-policy data and protocol.
+On the other environments our released-LeWM scores match the paper within sampling noise (TwoRoom 86 vs 87, Push-T
+96 vs 96, Cube 68 vs 74). The paper's figures are 3-seed means, while the release is a single checkpoint.
 
 The paper-50 set is noisy. For example, the released Push-T checkpoint scores 96 on it but 83.5 and 84.6 on n=200
 and n=500. Per-seed numbers, all checkpoints and the λ sweeps are in [`analysis/`](analysis/).
