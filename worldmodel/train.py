@@ -1,7 +1,7 @@
 """Train LeWM with either SIGReg (LeWM's anti-collapse term) or epiplexity (EpiWM; the score is from EpiJEPA) as the regulariser.
 
-Everything except the regulariser is LeWM's own recipe: the released checkpoints' architecture (ViT-tiny encoder,
-AdaLN predictor, MLP projectors; config/train/model/*.yaml), the dataset and transforms (utils.py, verbatim from
+Training starts from LeWM's released recipe: ViT-tiny encoder,
+AdaLN predictor, MLP projectors (config/train/model/*.yaml), the dataset and transforms (utils.py, verbatim from
 LeWM), AdamW lr 5e-5 / wd 1e-3, 1% linear warmup + cosine decay, grad-clip 1.0, bf16 autocast, batch 128,
 history 3, frameskip 5. LeWM trains with Lightning; this is the same loop in plain PyTorch so the loss is visible
 every few steps. Checkpoints are written with stable_worldmodel's save_pretrained, so LeWM's eval.py loads them.

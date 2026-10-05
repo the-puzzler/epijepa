@@ -1,15 +1,17 @@
-# EpiWM vs SIGReg (retrained) and the released LeWM checkpoints — final scorecard
+# EpiWM planning results
 
-Planning success rate (%). Same architecture as the released LeWM checkpoints; Epi replaces SIGReg with the
-epiplexity score + one non-affine BatchNorm on the projector output. CEM planner, LeWM defaults (300 samples,
+Planning success rate (%). EpiWM starts from the released LeWM architecture, replaces SIGReg with the
+epiplexity score and adds one non-affine BatchNorm on the projector output. CEM planner, LeWM defaults (300 samples,
 30 iters, top-30, horizon 5). Three eval sets, all seed 42, starts drawn from the training dataset:
-- **paper-50**: the paper's exact eval (50 episodes, goal offset 25, budget 50)
-- **n=200**: deeper eval, disjoint from the 50
-- **n=500**: backup eval (10 x 50 chunks), distinct starts verified
+- **paper-50**: the released evaluation sampler (50 tasks, goal offset 25, budget 50)
+- **n=200**: 200 tasks, disjoint from the 50
+- **n=500**: 500 tasks, evaluated in 10 chunks of 50
 
-Epi recipe: encoder form (frozen CNN reservoir -> ridge -> embedding), one form for all envs, λ per env.
+EpiWM uses the same encoder objective in all environments, with λ chosen per environment.
 
-## Headline (mean over seeds; seeds in brackets)
+## Success rates
+
+Each method lists its number of seeds. Individual seed scores follow each mean in parentheses.
 
 | Env | Budget | Method | paper-50 | n=200 | n=500 |
 |---|---|---|---|---|---|
@@ -31,33 +33,10 @@ Epi recipe: encoder form (frozen CNN reservoir -> ridge -> embedding), one form 
 
 SIGReg retrain = LeWM's recipe (SIGReg weight 0.09) trained by us at the same budget as Epi.
 
-## Significance (n=500, Fisher exact, pooled seeds)
-vs the SIGReg retrain (same budget):
-- TwoRoom: Epi 99.9 vs 87.9, p ≈ 5e-49.
-- Cube: Epi 71.5 vs 65.5, p = 0.002 (n=200 73.2 vs 64.0, p = 0.003).
-- Reacher (200k): Epi 73.5 vs 62.2, p ≈ 3e-9 (n=200 72.0 vs 62.5, p = 0.002).
-- Push-T: Epi 88.5 vs 88.6, p = 0.95 — tie.
+Released scores are measured with the released CEM-30 configuration. The blog separately reports the audited
+CEM-10 result for released Cube on paper-50 (72%, compared with 68% here).
 
-vs the released checkpoints:
-- TwoRoom: Epi 99.9 vs released 82.8 — overwhelming.
-- Cube (60k): Epi 71.5 vs released 66.0, p = 0.024.
-- Push-T: Epi 88.5 vs released 84.6.
-- Reacher: the budget matters — 60k Epi 58.1, 100k Epi 63.4 (vs released 60.8, n.s.);
-  **200k (matched to released budget) 73.5 vs 60.8, p ≈ 1e-7 (3 seeds); n=200 72.0 vs 62.0, p = 0.01.**
+Reacher evaluations use the released random-policy dataset. The LeWM paper describes SAC-collected data, so
+these scores are not directly comparable to its reported 86%.
 
-## Verdict
-- vs **SIGReg retrain** (same budget): Epi wins TwoRoom, Cube, Reacher; ties Push-T.
-- vs **released** weights: Epi beats them on all four envs on both n=200 and n=500 (Reacher at matched ~200k budget, 3 seeds).
-- paper-50 set is unreliable (e.g. released Push-T 96 on paper-50 vs 83.5/84.6 on n=200/500).
-
-## Notes for the write-up
-- Planning success peaks at ~60k on Push-T for both methods (200k Epi 81.5, released 83.5); Reacher keeps improving
-  to 200k; Cube is flat 60k->100k. So budgets differ per env.
-- TwoRoom: paper text says history 1, released checkpoint uses 3; we trust the release (3 everywhere).
-- Eval start states come from the training dataset (LeWM protocol).
-- Ablation: stop-gradient on the prediction target collapses planning (paper-50 0-4 by 40k; eff. rank 53 vs 151) —
-  the target-side gradient is load-bearing in LeWM.
-
-Released numbers are our measurement with LeWM's released eval; on Reacher the release uses random-policy data, not the paper's SAC data (paper: 86).
-
-Every individual number (all runs, checkpoints and eval sets) is in all_scores.csv in this folder.
+[All individual scores](https://huggingface.co/basilboy/epiwm/blob/main/analysis/scores/all_scores.csv) · [Blog post](https://the-puzzler.github.io/blog/epiwm/)

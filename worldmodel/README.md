@@ -1,11 +1,12 @@
 # EpiWM: epiplexity as the anti-collapse term of LeWorldModel
 
+[Blog post](https://the-puzzler.github.io/blog/epiwm/) · [Checkpoints](https://huggingface.co/basilboy/epiwm)
+
 [LeWorldModel](https://github.com/lucas-maes/le-wm) (LeWM) learns a latent world model end-to-end from pixels and plans
 in its latent space with CEM. To stop the embedding collapsing it adds **SIGReg**, which pushes the embeddings
 towards an isotropic Gaussian. Here SIGReg is replaced by the **epiplexity score** from EpiJEPA (`../epiplexity.py`),
 which rewards embeddings that are linearly predictable from a frozen random CNN reservoir of the same frames.
-Everything else is LeWM's: the architecture of the released checkpoints, the data, the optimiser and schedule, and
-the planner and evaluation.
+EpiWM uses LeWM's released data and CEM planner. The projector change and training budgets are described below.
 
 ```
 SIGReg (LeWM):  loss = ||pred(z_t, a_t) - z_t+1||^2 + 0.09 * SIGReg(z)
@@ -25,7 +26,7 @@ report the mean over seeds. The rows are:
 
 - **EpiWM:** 3 seeds.
 - **SIGReg retrain:** LeWM's own recipe (SIGReg, weight 0.09) trained by us with the same loop, data and budget as
-  EpiWM, 2 seeds. This isolates the regulariser.
+  EpiWM, 2 seeds.
 - **Released LeWM:** the official checkpoint (about 200k steps), evaluated by us with LeWM's unmodified released
   evaluation.
 
@@ -44,30 +45,22 @@ report the mean over seeds. The rows are:
 | | SIGReg retrain (200k, 2) | 60 | 62.5 | 62.2 |
 | | released LeWM | 52 | 62.0 | 60.8 |
 
-On n=500, with Fisher's exact test over pooled seeds:
-
-- **Against the SIGReg retrain at the same budget,** EpiWM is better on three environments and ties on Push-T:
-  - TwoRoom: 99.9 vs 87.9 (p ≈ 5e-49).
-  - Cube: 71.5 vs 65.5 (p = 0.002).
-  - Reacher: 73.5 vs 62.2 (p ≈ 3e-9).
-  - Push-T: 88.5 vs 88.6 (p = 0.95).
-- **Against the released checkpoints,** EpiWM is better on all four environments:
-  - TwoRoom: 99.9 vs 82.8.
-  - Cube: 71.5 vs 66.0 (p = 0.02).
-  - Push-T: 88.5 vs 84.6.
-  - Reacher: 73.5 vs 60.8 at the same ~200k-step budget (p ≈ 1e-7).
+On n=500, EpiWM has higher mean success than the SIGReg retrain on TwoRoom, Cube and Reacher; Push-T is
+effectively tied (88.5 vs 88.6). Its mean success is higher than the released checkpoint on all four environments.
 
 The released-LeWM numbers are our measurements and can differ from the LeWM paper's figures. This matters most for
 Reacher, where the paper reports 86:
 
-- The paper trained and evaluated Reacher on data collected by a SAC policy.
-- The released dataset, evaluation config and checkpoint all use random-policy data instead.
+- The paper describes training and evaluating Reacher on data collected by a SAC policy.
+- The released dataset and evaluation config use random-policy data. The released checkpoint's model card lists
+  that dataset, but its training provenance has not been independently verified.
 - LeWM's unmodified `eval.py` gives the same 52 on paper-50 as ours, with the same per-task outcomes.
-- The paper's Reacher setting cannot be reproduced from the released artifacts.
+- These released-data evaluations are not directly comparable to the paper's reported 86%.
 
-Everything in the table, EpiWM and the SIGReg retrain included, uses the released random-policy data and protocol.
-On the other environments our released-LeWM scores match the paper within sampling noise (TwoRoom 86 vs 87, Push-T
-96 vs 96, Cube 68 vs 74). The paper's figures are 3-seed means, while the release is a single checkpoint.
+All Reacher evaluations in the table use the released random-policy data and protocol, as do training runs for
+EpiWM and the SIGReg retrain. On the other environments, our released-LeWM scores are TwoRoom 86, Push-T 96 and
+Cube 68, compared with 87, 96 and 74 in the paper. The paper reports means across training seeds; the release is a
+single checkpoint.
 
 The paper-50 set is noisy. For example, the released Push-T checkpoint scores 96 on it but 83.5 and 84.6 on n=200
 and n=500. Per-seed numbers, all checkpoints and the λ sweeps are in [`analysis/`](analysis/).

@@ -15,7 +15,7 @@ hf download basilboy/epiwm --include "analysis/*" --local-dir ..    # from world
 
 | Path (on Hugging Face unless marked here) | What it is |
 |---|---|
-| `scores/scorecard.md` (here) | the headline table: per-seed and mean success on all three eval sets, significance tests, notes |
+| `scores/scorecard.md` (here) | per-seed and mean success on all three evaluation sets |
 | `scores/all_scores.csv` | every planning result we produced (see below) |
 | `loss_curves.png` (here), `training_logs/*.csv` | training curves of the reported config, 3 seeds per environment |
 | `embeddings/embeddings_<env>.png` (here), `embeddings/embeddings_<env>.csv` | PCA and t-SNE of 3000 random frames per environment, both models |

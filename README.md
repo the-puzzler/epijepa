@@ -95,9 +95,11 @@ Figures, metrics, exported embeddings and analysis scripts are in [embedding_ana
 
 ### EpiWM: replacing SIGReg in LeWorldModel
 
+[Blog post](https://the-puzzler.github.io/blog/epiwm/) · [Code and results](worldmodel/) · [Checkpoints](https://huggingface.co/basilboy/epiwm)
+
 The same score works as the anti-collapse term of a latent world model trained for planning. We swapped SIGReg for
-epiplexity in [LeWorldModel](https://github.com/lucas-maes/le-wm), keeping its architecture, data, schedule and CEM
-planner. On 500 test starts, EpiWM plans better than the released LeWM checkpoints on all four of LeWM's
+epiplexity in [LeWorldModel](https://github.com/lucas-maes/le-wm), adding non-affine BatchNorm to the projector
+output and using the released data and CEM planner. On 500 test starts, EpiWM plans better than the released LeWM checkpoints on all four of LeWM's
 benchmarks. It also beats LeWM's SIGReg recipe retrained by us at the same budget on three of them, and ties it on
 Push-T:
 
